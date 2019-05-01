@@ -1,0 +1,67 @@
+# Changelog
+Started this changelog a bit into the project. Hence changes for versions 1.6.8.1 and 1.6.8.2 are not 100% accurate.
+
+## Version 1.6.8.1
+
+### Added 
+- New color options
+
+### Changed
+- Enforced single and double quote consistency
+
+
+
+## Version 1.6.8.2
+### Added
+- Location and base font-size setting
+- German and au_en language files
+
+### Changed
+- Cleaned up code
+- Enforced American spelling in code for consistency
+
+
+
+##Version 1.6.8.3 [2019-04-30]
+### Added
+- New tags, classes, and id's for admin interface styling
+- Admin page stylsheet and js file
+- Changelog file
+
+### Changed
+- Naming of variables of cookie-bar.js and associated code in cookie-bar.php
+- Naming of id's and classes to hypenated from underscored
+
+### Removed
+- Cookie delete function from cookie-bar.js 
+
+
+
+## Version 1.6.8.4 [2019-04-31]
+### Added
+- New tags, classes, and id's for admin interface styling
+- New settings (color: text link on hover; button font-size; bar border with three width and color option; cursor on hover)
+
+- Automatic adjustment of line-height by adding 10% to line-height
+
+### Changed
+- Simplified output code (radio buttons and final output)
+- Admin interface design enhancement creating settings cards
+- Admin inteface colors
+
+
+
+## Version 1.6.8.5 [2019-04-01]
+### Added
+- New settings (bar shadow, bar padding)
+- Color picker text strings localisation using 'wp_localize_script'
+- Updated screenshots
+
+### Changed
+- All language strings are now wrapped into translation functions
+- Combined two style settings cards into one
+- Added on card subheadings for settings
+- Todo list
+
+### Removed
+- Old screenshots
