@@ -1,0 +1,133 @@
+/* Cookie Bar Admin Area Areas
+ *
+ * Wraper
+ * |_Info Area
+ * |_Left Hand Area
+ * |_Right Hand Area
+ * Footer Info
+ *
+ */
+ 
+/* Areas width Settings */
+#cookie-bar-admin-area-info,
+#cookie-bar-sponsor-message,
+.cookie-bar-admin-form-table,
+.cookie-bar-admin-section {
+    width: 720px;
+}
+
+
+/* Margin and Padding Resets */
+input, 
+select {
+    margin: 0;
+}
+.PLACEHOLDER {
+    padding: 0;
+}
+.PLACEHOLDER {
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Table Tabs */
+.cookie-bar-admin-section h3.cookie-bar-admin-current {
+    background-color: #ace;
+    border-left: 1px solid #666;
+    border-right: 1px solid #666;
+    border-top: 1px solid #666;
+    display: inline-block;
+    margin-bottom: -1px;
+    padding: .4rem 1rem .6rem 1rem;
+}
+
+
+/* Table Settings for Cookie Bar Admin Area */
+.cookie-bar-admin-form-table {
+    background-color: #ace;
+    border: 1px solid #666;
+    margin: 0 0 1rem 0;
+    padding: .8rem;
+}
+.cookie-bar-admin-form-table tr,
+.cookie-bar-admin-form-table th,
+.cookie-bar-admin-form-table td {
+    border: 0 solid transparent;
+}
+.cookie-bar-admin-form-table th,
+.cookie-bar-admin-form-table td {
+    background-color: #dce2ed;
+    padding: .4rem .6rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+
+/* Form Settings */
+input[type="radio"] {
+  margin-top: .1rem;
+}
+input, 
+textarea
+{
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    vertical-align: middle;
+}
+
+
+/* Cookie Bar Text Settings */
+#cookie-bar-admin-form-table-text-settings th {
+    width: 30%;
+}
+
+#cookie-bar-admin-form-message-text-input,
+#cookie-bar-admin-form-button-text-input {
+    width: 99%;
+}
+#cookie-bar-admin-form-message-text-input {
+    height: 3em;
+}
+
+
+/* Sponsor Message Area */
+#cookie-bar-sponsor-message {
+  background-color: #dce2ed;
+  margin: 1.5rem 0 3rem 0;
+  padding: .1rem .5rem .1rem 1rem;
+}
+#cookie-bar-sponsor-logo {
+  display: inline-block;
+  height: 1.2rem;
+  margin-bottom: -.4rem;
+  margin-left: .3rem;
+}
+
+
+
+table tr th h4 {
+  font-size: 1.2em;
+  font-weight: 800;
+  text-align: center;
+}
+
+
+/* Cookie Bar Admin Area Footer Info */
+#wpfooter {
+  background-color: #23282d;
+  bottom: 0;
+  color: #ddf;
+  display: block;
+  position: fixed;
+}
+#footer-upgrade {
+    font-weight: 800;
+}
+
+/* prevent color selector from dropping to the new line */
+#getittofloat > select {
+  float: left;
+  margin-right: .6rem;
+}
+
