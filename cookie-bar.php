@@ -5,7 +5,7 @@ Plugin URI: https://www.brontobytes.com/
 Description: Cookie Bar allows you to discreetly inform visitors that your website uses cookies.
 Author: Brontobytes
 Author URI: https://www.brontobytes.com/
-Version: 1.8.6
+Version: 1.8.5
 License: GPLv2
 */
 
