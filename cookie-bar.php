@@ -5,7 +5,7 @@ Plugin URI: https://www.brontobytes.com/
 Description: Cookie Bar allows you to discreetly inform visitors that your website uses cookies.
 Author: Brontobytes
 Author URI: https://www.brontobytes.com/
-Version: 1.8.6.2.5
+Version: 1.8.6.2.6
 License: GPLv2
 */
 
@@ -13,30 +13,22 @@ License: GPLv2
  * Todo List
  * ---------
  * - Use classes in code 
- * - Clean up code
- * - Add a Cookie Bar demo version in the right hand admin area
+ * - Add a Cookie Bar in admin live demo version that updates on settings change for real time review
+ *   |_ setting to turn demo on and off
+ *   |_ display in admin area or in a window simulation (?)
  * - Allow for settings export/import 
  * - Build a caching system (-> code written to a static CSS file that is pointed to instead of processing display code) 
- * - Allow for saving message and button text in different languages
  * - Add help/info icons which open info windows
- * - Allow for change of button text on hover
- * - Provide cookie translateable cookie explanation page that users can link to
+ * - Provide cookie explanation page (on site) that users can link to (and that can be translated so to have an explanation in every language
  * - Increase security of plugin
  *   |_ sanitize input
- * - Add settings
- *   |_ Style settings
- *     |_ Advanced Settings Tab
- *        |_ Padding and margin for links and button
- *        |_ Background color for links
- *        |_ Borders for button and links
- *        |_ Shadow for text, text links, button, and button text
- * - Improve localisation
+ *   |_ sanitize output
  * - Create language files/translations
  *   |_ de_de
  *   |_ en_au
- *   |_ en_ca
  *   |_ en_gb
  *   |_ en_us
+ * - combine settings cards (button menu to make cards appear)
  */
 
 if ( ! defined( 'ABSPATH' ) )
@@ -47,37 +39,37 @@ if ( ! defined( 'ABSPATH' ) )
 /*
  * Default Settings
  *
- * These are to have all default values in one spot for easy modification.
+ * Here all default values in one spot for easy modification.
  * This will be of interest to those who will want to distribute this plugin with their default values.
  *
  * Default values are ordered in appearance and sorted into their categories.
  */
 /* Text Settings */
-define( 'DEFAULT_COOKIE_BAR_MESSAGE_TEXT', 'By continuing to browse this site you are agreeing to the <a href="http://www.aboutcookies.org/" target="_blank" rel="nofollow">use of cookies</a>.' );
-define( 'DEFAULT_COOKIE_BAR_BUTTON_TEXT', 'I Understand' );
-/* Style Settings */
-define( 'DEFAULT_COOKIE_BAR_LOCATION', 'top' );
+define( 'DEFAULT_COOKIE_BAR_MESSAGE_TEXT', __('By continuing to browse this site you are agreeing to the <a href="http://www.aboutcookies.org/" target="_blank" rel="nofollow">use of cookies</a>.', 'cookie-bar') );
+define( 'DEFAULT_COOKIE_BAR_BUTTON_TEXT', __('I Understand', 'cookie-bar') );
+/* Style Settings */                    
+define( 'DEFAULT_COOKIE_BAR_LOCATION', 'bottom' );
 define( 'DEFAULT_COOKIE_BAR_ALIGNMENT', 'center' );
-define( 'DEFAULT_COOKIE_BAR_FONT_SIZE', '1.1' );
-define( 'DEFAULT_COOKIE_BAR_FONT_SIZE_UNITS', 'rem' );
-define( 'DEFAULT_COOKIE_BAR_BUTTON_FONT_SIZE', '1.3' );
-define( 'DEFAULT_COOKIE_BAR_BUTTON_FONT_SIZE_UNITS', 'rem' );
+define( 'DEFAULT_COOKIE_BAR_FONT_SIZE', '12' );
+define( 'DEFAULT_COOKIE_BAR_FONT_SIZE_UNITS', 'px' );
+define( 'DEFAULT_COOKIE_BAR_BUTTON_FONT_SIZE', '12' );
+define( 'DEFAULT_COOKIE_BAR_BUTTON_FONT_SIZE_UNITS', 'px' );
 define( 'DEFAULT_COOKIE_BAR_BORDER', '1px' );
 define( 'DEFAULT_COOKIE_BAR_BORDER_COLOR', '#fff' );
 define( 'DEFAULT_COOKIE_BAR_SHADOW', 'none' );
-define( 'DEFAULT_COOKIE_BAR_PADDING', '.5');
-define( 'DEFAULT_COOKIE_BAR_PADDING_UNITS', 'rem');
-define( 'DEFAULT_COOKIE_BAR_CURSOR_BUTTON_HOVER', 'text' );
+define( 'DEFAULT_COOKIE_BAR_PADDING', '3');
+define( 'DEFAULT_COOKIE_BAR_PADDING_UNITS', 'px');
+define( 'DEFAULT_COOKIE_BAR_CURSOR_BUTTON_HOVER', 'pointer' );
 
 /* Color Values */
-define( 'DEFAULT_COOKIE_BAR_BACKGROUND_COLOR', '#004' );
+define( 'DEFAULT_COOKIE_BAR_BACKGROUND_COLOR', '#2e363f' );
 define( 'DEFAULT_COOKIE_BAR_TEXT_COLOR', '#fff' );
-define( 'DEFAULT_COOKIE_BAR_TEXT_LINK_COLOR', '#ace' );
-define( 'DEFAULT_COOKIE_BAR_TEXT_LINK_HOVER_COLOR', '#eac' );
-define( 'DEFAULT_COOKIE_BAR_BUTTON_BACKGROUND_COLOR', '#0a0' );
-define( 'DEFAULT_COOKIE_BAR_BUTTON_HOVER_BACKGROUND_COLOR', '#cfc' );
-define( 'DEFAULT_COOKIE_BAR_BUTTON_TEXT_COLOR', '#efe' );
-define( 'DEFAULT_COOKIE_BAR_BUTTON_HOVER_TEXT_COLOR', '#070' );
+define( 'DEFAULT_COOKIE_BAR_TEXT_LINK_COLOR', '#fff' );
+define( 'DEFAULT_COOKIE_BAR_TEXT_LINK_HOVER_COLOR', '#fff' );
+define( 'DEFAULT_COOKIE_BAR_BUTTON_BACKGROUND_COLOR', '#45ae52' );
+define( 'DEFAULT_COOKIE_BAR_BUTTON_HOVER_BACKGROUND_COLOR', '#45ae52' );
+define( 'DEFAULT_COOKIE_BAR_BUTTON_TEXT_COLOR', '#fff' );
+define( 'DEFAULT_COOKIE_BAR_BUTTON_HOVER_TEXT_COLOR', '#fff' );
 
 
 
@@ -158,30 +150,37 @@ wp_localize_script(
                     <th colspan="2"><h4><?php _e('Color Settings', 'cookie-bar'); ?></h4></th>
                 </tr>
                 <tr>
-                    <th scope="row"><?php _e('Bar Location', 'cookie-bar'); ?></th>
+                    <th scope="row"><?php _e('Bar Location', 'cookie-bar'); ?></th> <?php 
+                if ( is_rtl() == true) { ?>
                     <td><?php 
-                    if ( (get_option('cookie_bar_location') == true && get_option('cookie_bar_location') === "top") ) { ?>
-                        <input type="radio" id="cookie-bar-location-top" name="cookie_bar_location" value="top" checked=checked> 
-                        <label for="cookie-bar-location-top">
-                            <?php echo _e('Top of page', 'cookie-bar'); ?>
-                        </label>
-                        <br>
-                        <input type="radio" id="cookie-bar-location-bottom" name="cookie_bar_location" value="bottom"> 
-                        <label for="cookie-bar-location-bottom"><?php echo _e('Bottom of page', 'cookie-bar'); ?></label><?php 
-                    } elseif ( (get_option('cookie_bar_location') != true && DEFAULT_COOKIE_BAR_LOCATION === "top") ) { ?>
-                        <input type="radio" id="cookie-bar-location-top" name="cookie_bar_location" value="top" checked=checked> 
+                    if ( (get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) === "top") ) { ?>
+                        <label for="cookie-bar-location-bottom"><?php echo _e('Bottom', 'cookie-bar'); ?></label> 
+                        <input type="radio" id="cookie-bar-location-bottom" name="cookie_bar_location" value="bottom">
+                        <label for="cookie-bar-location-top"><?php echo _e('Top', 'cookie-bar'); ?></label>
+                        <input type="radio" id="cookie-bar-location-top" name="cookie_bar_location" value="top" checked=checked> <?php 
+                    } else { ?> 
+                        <label for="cookie-bar-location-bottom"><?php echo _e('Bottom of page', 'cookie-bar'); ?></label>
+                        <input type="radio" id="cookie-bar-location-bottom" name="cookie_bar_location" value="bottom">
                         <label for="cookie-bar-location-top"><?php echo _e('Top of page', 'cookie-bar'); ?></label>
-                        <br>
-                        <input type="radio" id="cookie-bar-location-bottom" name="cookie_bar_location" value="bottom"> 
-                        <label for="cookie-bar-location-bottom"><?php echo _e('Bottom of page', 'cookie-bar'); ?></label><?php 
-                    } else { ?>
-                        <input type="radio" id="cookie-bar-location-top" name="cookie_bar_location" value="top"> 
-                        <label for="cookie-bar-location-top"><?php echo _e('Top of page', 'cookie-bar'); ?></label>
-                        <br>
-                        <input type="radio" id="cookie-bar-location-bottom" name="cookie_bar_location" value="bottom" checked=checked> 
-                        <label for="cookie-bar-location-bottom"><?php echo _e('Bottom of page', 'cookie-bar'); ?></label><?php
+                        <input type="radio" id="cookie-bar-location-top" name="cookie_bar_location" value="top" checked=checked> <?php 
                     }; ?>
                     </td>
+                    <?php 
+                } else { ?>
+                    <td><?php 
+                    if ( (get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) === "top") ) { ?>
+                        <input type="radio" id="cookie-bar-location-top" name="cookie_bar_location" value="top" checked=checked> 
+                        <label for="cookie-bar-location-top"><?php echo _e('Top', 'cookie-bar'); ?></label>
+                        <input type="radio" id="cookie-bar-location-bottom" name="cookie_bar_location" value="bottom"> 
+                        <label for="cookie-bar-location-bottom"><?php echo _e('Bottom', 'cookie-bar'); ?></label><?php 
+                    } else { ?>
+                        <input type="radio" id="cookie-bar-location-top" name="cookie_bar_location" value="top" checked=checked> 
+                        <label for="cookie-bar-location-top"><?php echo _e('Top of page', 'cookie-bar'); ?></label>
+                        <input type="radio" id="cookie-bar-location-bottom" name="cookie_bar_location" value="bottom"> 
+                        <label for="cookie-bar-location-bottom"><?php echo _e('Bottom of page', 'cookie-bar'); ?></label><?php 
+                    }; ?>
+                    </td><?php
+                }; ?>
                     <th scope="row"><?php _e('Bar Color', 'cookie-bar'); ?></th>
                     <td>
                         <input type="text" name="cookie_bar_background_color" value="<?php 
@@ -195,24 +194,44 @@ wp_localize_script(
                 </tr>
                 <tr>    
                     <th scope="row"><?php _e('Alignment', 'cookie-bar'); ?></th>
-                    </th>
+                    </th> <?php
+                if ( is_rtl() == true ) { ?>
+                    <td>
+                        <label for="cookie-bar-alignment-left"><?php _e('left', 'cookie-bar'); ?></label
+                        <input type="radio" id="cookie-bar-alignment-left" name="cookie_bar_alignment" value="left"<?php
+                        if ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT) === 'left') {
+                            echo ' checked';
+                        }?>>>
+                        <label for="cookie-bar-alignment-center"><?php _e('center', 'cookie-bar'); ?></label>
+                        <input type="radio" id="cookie-bar-alignment-center" name="cookie_bar_alignment" value="center"<?php
+                        if ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT) === 'center') {
+                            echo ' checked';
+                        }?>>
+                        <label for="cookie-bar-alignment-right"><?php _e('right', 'cookie-bar'); ?></label>
+                        <input type="radio" id="cookie-bar-alignment-right" name="cookie_bar_alignment" value="right"<?php
+                        if ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT) === 'right') {
+                            echo ' checked';
+                        }?>>
+                    </td> <?php
+                } else { ?>
                     <td>
                         <input type="radio" id="cookie-bar-alignment-left" name="cookie_bar_alignment" value="left"<?php
                         if ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT) === 'left') {
                             echo ' checked';
                         }?>>
-                        <label for="cookie-bar-alignment-left"><?php _e('left', 'cookie-bar'); ?></label>&nbsp;
+                        <label for="cookie-bar-alignment-left"><?php _e('left', 'cookie-bar'); ?></label>
                         <input type="radio" id="cookie-bar-alignment-center" name="cookie_bar_alignment" value="center"<?php
                         if ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT) === 'center') {
                             echo ' checked';
                         }?>>
-                        <label for="cookie-bar-alignment-center"><?php _e('center', 'cookie-bar'); ?></label>&nbsp;
+                        <label for="cookie-bar-alignment-center"><?php _e('center', 'cookie-bar'); ?></label>
                         <input type="radio" id="cookie-bar-alignment-right" name="cookie_bar_alignment" value="right"<?php
                         if ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT) === 'right') {
                             echo ' checked';
                         }?>>
                         <label for="cookie-bar-alignment-right"><?php _e('right', 'cookie-bar'); ?></label>
-                    </td>
+                    </td> <?php
+                }; ?>
                     <th scope="row"><?php _e('Bar Text Color', 'cookie-bar'); ?></th>
                     <td>
                         <input type="text" name="cookie_bar_text_color" value="<?php 
@@ -429,15 +448,15 @@ wp_localize_script(
                     <td>
                         <select name="cookie_bar_cursor_button_hover">
                             <option value="crosshair" <?php
-                            if (get_option('cookie_bar_cursor_button_hover', DEFAULT_COOKIE_BAR_CURSOR_BUTTON_HOVER) == "crosshair") {
+                            if (get_option('cookie_bar_cursor_button_hover', DEFAULT_COOKIE_BAR_CURSOR_BUTTON_HOVER) === "crosshair") {
                                 echo "selected";
                             }; ?>>crosshair</option>
                             <option value="pointer" <?php
-                            if (get_option('cookie_bar_cursor_button_hover', DEFAULT_COOKIE_BAR_CURSOR_BUTTON_HOVER) == "pointer") {
+                            if (get_option('cookie_bar_cursor_button_hover', DEFAULT_COOKIE_BAR_CURSOR_BUTTON_HOVER) === "pointer") {
                                 echo "selected";
                             }; ?>>pointer</option>>pointer</option>
                             <option value="text" <?php
-                            if (get_option('cookie_bar_cursor_button_hover', DEFAULT_COOKIE_BAR_CURSOR_BUTTON_HOVER) == "text") {
+                            if (get_option('cookie_bar_cursor_button_hover', DEFAULT_COOKIE_BAR_CURSOR_BUTTON_HOVER) === "text") {
                                 echo "selected";
                             }; ?>>text</option>>text</option>
                         </select>
@@ -576,20 +595,15 @@ function cookie_bar_head() { ?>
 
 <!-- START Cookie Bar Styles -->
 <style>
-    span {
-        display: inline-block;
-    }
     #cookie-bar-wp {
         background-color: <?php 
         if ( get_option('cookie_bar_background_color') == true ) {
             echo esc_attr( get_option('cookie_bar_background_color') );
         } else {
             echo DEFAULT_COOKIE_BAR_BACKGROUND_COLOR;
-        }; ?>;
-        <?php
+        }; ?>; <?php
         if ( get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) === "top" ) { $location = "bottom"; }
         else { $location = "top"; };?>
-       
         border-<?php echo $location; ?>: <?php 
         if ( get_option('cookie_bar_border', DEFAULT_COOKIE_BAR_BORDER) === '1px') {
             echo '1px solid ';
@@ -598,14 +612,14 @@ function cookie_bar_head() { ?>
             } else {
                 echo DEFAULT_COOKIE_BAR_BORDER_COLOR;
             };
-        } elseif ( get_option('cookie_bar_border', DEFAULT_COOKIE_BAR_BORDER) == '2px') {
+        } elseif ( get_option('cookie_bar_border', DEFAULT_COOKIE_BAR_BORDER) === '2px') {
             echo '2px solid ';
             if ( get_option('cookie_bar_border_color') == true) {
                 echo esc_attr( get_option('cookie_bar_border_color') );
             } else {
                 echo DEFAULT_COOKIE_BAR_BORDER_COLOR;
             };
-        } elseif ( get_option('cookie_bar_border', DEFAULT_COOKIE_BAR_BORDER) == '3px') {
+        } elseif ( get_option('cookie_bar_border', DEFAULT_COOKIE_BAR_BORDER) === '3px') {
             echo '3px solid ';
             if ( get_option('cookie_bar_border_color') == true) {
                 echo esc_attr( get_option('cookie_bar_border_color') );
@@ -616,34 +630,34 @@ function cookie_bar_head() { ?>
             echo 'none';
         }; ?>;
         box-shadow: 0 <?php
-        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '2pxblack' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
+        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '2pxblack' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
             echo '2px 2px #000';
-        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '2pxblack' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
+        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '2pxblack' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
                 echo '-2px 2px #000';
         };
-        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '4pxblack' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
+        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '4pxblack' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
             echo '4px 4px #000';
-        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '4pxblack' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
+        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '4pxblack' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
                 echo '-4px 4px #000';
         };
-        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '2pxgray' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
+        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '2pxgray' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
             echo '2px 2px #999';
-        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '2pxgray' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
+        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '2pxgray' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
                 echo '-2px 2px #000';
         }; 
-        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '4pxgray' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
+        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '4pxgray' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
             echo '4px 4px #999';
-        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '4pxgray' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
+        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '4pxgray' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
                 echo '-4px 4px #000';
         };
-        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '2pxwhite' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
+        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '2pxwhite' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
             echo '2px 2px #fff';
-        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '2pxwhite' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
+        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '2pxwhite' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
                 echo '-2px 2px #000';
         };
-        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '4pxwhite' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
+        if ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '4pxwhite' && get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'top' ) {
             echo '4px 4px #fff';
-        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) == '4pxwhite' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
+        } elseif ( get_option('cookie_bar_shadow', DEFAULT_COOKIE_BAR_SHADOW) === '4pxwhite' &&  get_option('cookie_bar_location', DEFAULT_COOKIE_BAR_LOCATION) == 'bottom' ) {
                 echo '-4px 4px #000';
         } else {
             echo '';
@@ -696,13 +710,19 @@ function cookie_bar_head() { ?>
         bottom: 0; <?php
         }; ?>
         text-align: <?php
-        if ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT)  == 'left' ) { 
+        if ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT)  === 'left' ) { 
             echo 'left';
-        } elseif ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT) == 'right' ) { 
+        } elseif ( get_option('cookie_bar_alignment', DEFAULT_COOKIE_BAR_ALIGNMENT) === 'right' ) { 
             echo 'right';
         } else {
             echo 'center';
-        }; ?>;
+        }; ?>; <?php
+        if ( is_rtl() == true ) { ?>
+        direction: rtl;
+        unicode-bidi: bidi-override; <?php
+        } else { ?>
+        direction: ltr; <?php
+        }; ?>
     }
     #cookie-bar-wp a {
         color: <?php if (get_option('cookie_bar_text_link_color') == true ) {
@@ -772,20 +792,38 @@ function cookie_bar() { ?>
 
 
 <!-- START Cookie Bar -->
-<div id="cookie-bar-wp">
-    <span>
-        <?php if (get_option('cookie_bar_message_text') == true ) {
+<div id="cookie-bar-wp"> <?php
+    if ( is_rtl() == true ) { ?>
+    <button id="cookie-bar-cookie-accept-wp" onclick="cookieBarAcceptCookiesWP();"><?php 
+        if (get_option('cookie_bar_button_text') == true ) {
+            echo get_option('cookie_bar_button_text');
+        } else {
+            echo DEFAULT_COOKIE_BAR_BUTTON_TEXT;
+        }; ?></button>
+    <span>          
+        <?php 
+        if (get_option('cookie_bar_message_text') == true ) {
+            echo get_option('cookie_bar_message_text');
+        } else {
+            echo DEFAULT_COOKIE_BAR_MESSAGE_TEXT;
+        };   ?> 
+    </span> <?php
+    } else { ?>
+    <span>          
+        <?php 
+        if (get_option('cookie_bar_message_text') == true ) {
             echo get_option('cookie_bar_message_text');
         } else {
             echo DEFAULT_COOKIE_BAR_MESSAGE_TEXT;
         };   ?> 
     </span>
     <button id="cookie-bar-cookie-accept-wp" onclick="cookieBarAcceptCookiesWP();"><?php 
-    if (get_option('cookie_bar_button_text') == true ) {
-        echo get_option('cookie_bar_button_text');
-    } else {
-        echo DEFAULT_COOKIE_BAR_BUTTON_TEXT;
-    }; ?></button>
+        if (get_option('cookie_bar_button_text') == true ) {
+            echo get_option('cookie_bar_button_text');
+        } else {
+            echo DEFAULT_COOKIE_BAR_BUTTON_TEXT;
+        }; ?></button> <?php
+    }; ?>
 </div>
 <!-- END Cookie Bar -->
 
