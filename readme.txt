@@ -1,5 +1,5 @@
 === Cookie Bar ===
-Contributors: nimonogi
+Contributors: nimonogi, jaypix
 Tags: cookie bar, consent, cookie, cookies, cookie compliance, cookie law, cookies, eu cookie, notice, notification, notify, privacy, privacy directive, brontobytes
 Requires at least: 3.8
 Tested up to: 5.1
@@ -7,37 +7,45 @@ Stable tag: 1.8.6
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
+
 Cookie Bar allows you to discreetly inform visitors that your website uses cookies.
 
+
 == Description ==
-A simple, lightweight WordPress plugin for displaying a discreet notification bar that is dismissable and dismiss is saved by cookie. Perfect for implementing the new eu cookie law!
+Cookie Bar WordPress plugin for displaying a discreet notification bar that is dismissable and dismiss is saved by placing a cookie. Once a visitor has accept the Cookie Bar, then disappears. The Cookie Bar appears on all pages until the button is clicked. Perfect for implementing the new eu cookie law! And it further provides an opportunity to inform visitors what cookies are, how they work, and what it can mean for their privacy.
 
-<strong>The Cookie Bar plugin creates a small bar at the bottom of the website with a short customizable message about cookies and accept button.</strong> Once a visitor has accept the Cookie Bar, then disappears.
+**The Cookie Bar plugin creates a small bar on the website with a short customizable message about cookies and accept button.** This bar can be customized by changing the message and button text, where it appears on the page (top or bottom) and other style settings to make it visually perform well with the sites theme.
 
-Feel free to try out the plugin through our installation of <a href="https://www.brontobytes.com/blog/cookie-bar-free-wordpress-plugin/">Cookie Bar</a>.
+You can view how a user experiences the cookie bar by visiting the Brontobytes Blog [https://www.brontobytes.com/blog/cookie-bar-free-wordpress-plugin/] which has Cookie Bar installed. And you can look at the screenshots to get an impression of the look and feel of admin area and the cookie bar in action.
+
+
+
+== Features ==
+- Display of cookie usage information as required by EU law
+- Cookie Bar design options
+- Internationalisation ready
+- RTL support
+
+
 
 == Installation ==
-Add the plugin by uploading the zip file or by installing it from the Wordpress Plugin directory.
-Activate the plugin and go to the Universal Cookie Bar.
-Fill in your Cookie Bar account identifier.
-That's all!
+There are two ways to install this plugin.
+
+1) Add the plugin by uploading the zip file to the plugins directory of your installation [installation_directory/wp-content/plugins/]
+2) Use the Wordpress Plugin page on your site, click on "Add New" in the top left hand corner next to the page title and search for Cookie Bar.
+
+Then you need to activate the plugin to be able to use it.
+
+Next go to the Cookie Bar settings which you can access in the sidebar by hovering over the Settings menu item and selecting "Cookie Bar".
+
+That's it!
+
 
 == Screenshots ==
-1. Plugin Settings screenshot-1.png
-2. Cookie Bar screenshot-2.png
+1. Plugin Admin Page -> screenshot.adminpage.0.png
+2. Cookie Bar in action with default settings -> screenshot.inaction.default.png
+3. Cookie Bar in action with altered settings -> screenshot.inaction.altered.0.png
+
 
 == Changelog ==
-= Version 1.2 =
-1. Initial public release
-= Version 1.3.5 =
-1. Default values added
-= Version 1.4 =
-1. Option to change button colour
-= Version 1.5 =
-1. Color Picker added
-= Version 1.6 =
-1. Attempt to resolve possible caching issue with cookie
-= Version 1.7 =
-1. Added i18n internationalization support
-= Version 1.8 =
-1. Fix compatibility issue
+See changelog file in plugin directory.
